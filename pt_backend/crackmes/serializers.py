@@ -46,7 +46,6 @@ class ActionHistorySerializer(ModelSerializer):
 
 
 class TaskSerializer(ModelSerializer):
-    solutions = ReadOnlyField()
     actions = ActionHistorySerializer(read_only=True, many=True)
 
     class Meta:
@@ -55,8 +54,6 @@ class TaskSerializer(ModelSerializer):
 
 
 class TaskSerializerAnonymous(ModelSerializer):
-    solutions = ReadOnlyField()
-
     class Meta:
         model = Task
         fields = '__all__'

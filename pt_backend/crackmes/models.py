@@ -29,10 +29,6 @@ class Task(Model):
     writeups_num = IntegerField(default=0)
     comments_num = IntegerField(default=0)
 
-    @cached_property
-    def solutions(self):
-        return ActionHistory.objects.filter(task_id=self.id).count()
-
     def __str__(self):
         return f'{self.name}'
 
