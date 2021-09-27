@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group
 from rest_framework.fields import ReadOnlyField, CharField, DateTimeField
 from rest_framework.serializers import ModelSerializer
 
-from crackmes.models import Task, ActionHistory
+from crackmes.models import Task, ActionHistory, ScrapperHistory
 
 
 class GroupSerializer(ModelSerializer):
@@ -50,10 +50,19 @@ class TaskSerializer(ModelSerializer):
 
     class Meta:
         model = Task
-        fields = '__all__'
+        exclude = ('language', )
 
 
 class TaskSerializerAnonymous(ModelSerializer):
     class Meta:
         model = Task
-        fields = '__all__'
+        exclude = ('language', )
+
+
+class ScrapperHistorySerializer(ModelSerializer):
+    date = DateTimeField(format="%Y-%m-%d", read_only=True)
+
+    class Meta:
+        model = ScrapperHistory
+        exclude = ('id', 'success')
+

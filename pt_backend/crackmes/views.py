@@ -1,14 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Prefetch
 from rest_framework import permissions, status
-from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from crackmes.models import Task, AppUser, ActionHistory
+from crackmes.models import Task, AppUser, ActionHistory, ScrapperHistory
 from crackmes.serializers import UserSerializer, TaskSerializer, ActionHistorySerializer, \
-    TaskSerializerAnonymous, ActionHistorySerializerSave
+    TaskSerializerAnonymous, ActionHistorySerializerSave, ScrapperHistorySerializer
 
 
 class CreateUserView(CreateAPIView):
@@ -90,6 +90,14 @@ class UpdateStatus(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LastUpdated(RetrieveAPIView):
+    serializer_class = ScrapperHistorySerializer
+    model = ScrapperHistory
+
+    def get_object(self):
+        return ScrapperHistory.objects.all().filter(success=True).latest('date')
 
 
 class HasSpecialProgressViewAccess(BasePermission):
