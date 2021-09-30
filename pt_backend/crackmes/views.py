@@ -56,11 +56,6 @@ class TasksView(ListAPIView):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
 
-    def list(self, request, *args, **kwargs):
-        ret = super().list(request, *args, **kwargs)
-        print(ret)
-        return ret
-
 
 class UpdateStatus(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -100,6 +95,5 @@ class UserActions(ListAPIView):
         for action in queryset:
             actionsDict[str(action.task_id)].append({'date': action.date, 'status': action.status})
 
-        print(actionsDict)
         return Response(actionsDict)
 
