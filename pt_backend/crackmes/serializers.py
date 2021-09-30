@@ -11,6 +11,7 @@ class GroupSerializer(ModelSerializer):
         model = Group
         fields = ('name',)
 
+
 class UserSerializer(ModelSerializer):
     groups = GroupSerializer(read_only=True, many=True)
     solved_count = ReadOnlyField()
@@ -46,18 +47,14 @@ class ActionHistorySerializer(ModelSerializer):
 
 
 class TaskSerializer(ModelSerializer):
-    actions = ActionHistorySerializer(read_only=True, many=True)
-
     class Meta:
         model = Task
         exclude = ('language', )
 
-
-class TaskSerializerAnonymous(ModelSerializer):
-    class Meta:
-        model = Task
-        exclude = ('language', )
-
+    def to_representation(self, instance):
+        r = super().to_representation(instance)
+        r['id'] = str(r['id'])
+        return r
 
 class ScrapperHistorySerializer(ModelSerializer):
     date = DateTimeField(format="%Y-%m-%d", read_only=True)

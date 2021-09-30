@@ -1,3 +1,6 @@
+from collections import defaultdict
+from typing import List
+
 from django.contrib.auth import get_user_model
 from django.db.models import Prefetch
 from rest_framework import permissions, status
@@ -8,7 +11,7 @@ from rest_framework.views import APIView
 
 from crackmes.models import Task, AppUser, ActionHistory, ScrapperHistory
 from crackmes.serializers import UserSerializer, TaskSerializer, ActionHistorySerializer, \
-    TaskSerializerAnonymous, ActionHistorySerializerSave, ScrapperHistorySerializer
+     ActionHistorySerializerSave, ScrapperHistorySerializer
 
 
 class CreateUserView(CreateAPIView):
@@ -49,33 +52,14 @@ class UserView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class TasksView(APIView):
-    def get(self, request):
-        user: AppUser = request.user
-        if user.is_authenticated:
-            tasks = Task.objects.prefetch_related(
-                Prefetch("actions", queryset=ActionHistory.objects.filter(user=user))
-            )
-            serializer = TaskSerializer(tasks, many=True)
-        else:
-            tasks = Task.objects.all()
-            serializer = TaskSerializerAnonymous(tasks, many=True)
+class TasksView(ListAPIView):
+    serializer_class = TaskSerializer
+    queryset = Task.objects.all()
 
-        return Response(serializer.data)
-
-
-class TaskView(ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = ActionHistorySerializer
-    model = ActionHistory
-
-    def get_queryset(self):
-        user = self.request.user
-        task_id = self.kwargs['id']
-        return self.model.objects.filter(
-            user=user,
-            task_id=task_id
-        )
+    def list(self, request, *args, **kwargs):
+        ret = super().list(request, *args, **kwargs)
+        print(ret)
+        return ret
 
 
 class UpdateStatus(APIView):
@@ -103,4 +87,19 @@ class LastUpdated(RetrieveAPIView):
 class HasSpecialProgressViewAccess(BasePermission):
     def has_permission(self, request, view):
         return request.user.groups.filter(name='special_progress_view').exists()
+
+
+class UserActions(ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        user = self.request.user
+        queryset = ActionHistory.objects.filter(user=user)
+
+        actionsDict = defaultdict(list)
+        for action in queryset:
+            actionsDict[str(action.task_id)].append({'date': action.date, 'status': action.status})
+
+        print(actionsDict)
+        return Response(actionsDict)
 

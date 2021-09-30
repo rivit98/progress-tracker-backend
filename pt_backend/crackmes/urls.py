@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from crackmes.views import CreateUserView, TasksView, TaskView, UpdateStatus, UserView, LastUpdated
+from crackmes.views import CreateUserView, TasksView, UpdateStatus, UserView, LastUpdated, UserActions
 
 API_VERSION = 'v1'
 
@@ -16,7 +16,7 @@ urlpatterns = [
 
 
     path(f'{API_VERSION}/tasks/', TasksView.as_view()),
-    path(f'{API_VERSION}/tasks/<int:id>/', TaskView.as_view()),
     path(f'{API_VERSION}/tasks/<int:id>/status', UpdateStatus.as_view()),
-    path(f'{API_VERSION}/tasks/lastUpdated', LastUpdated.as_view())
+    path(f'{API_VERSION}/tasks/lastUpdated', LastUpdated.as_view()),
+    path(f'{API_VERSION}/tasks/actions', UserActions.as_view())
 ]
