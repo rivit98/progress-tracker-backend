@@ -16,7 +16,7 @@ urlpatterns = [
 
 
     path(f'{API_VERSION}/tasks/', TasksView.as_view()),
-    path(f'{API_VERSION}/tasks/<int:id>/status', UpdateStatus.as_view()),
-    path(f'{API_VERSION}/tasks/lastUpdated', LastUpdated.as_view()),
-    path(f'{API_VERSION}/tasks/actions', UserActions.as_view())
+    path(f'{API_VERSION}/tasks/<int:id>/status/', UpdateStatus.as_view()),
+    path(f'{API_VERSION}/tasks/lastUpdated/', LastUpdated.as_view()),
+    path(f'{API_VERSION}/tasks/actions/', UserActions.as_view())
 ]
