@@ -36,7 +36,7 @@ class UserView(APIView):
             return Response({"detail": "Missing password field"}, status=status.HTTP_400_BAD_REQUEST)
 
         if not user.check_password(oldPassword):
-            return Response({"oldPassword": "Niepoprawne hasło."}, status=status.HTTP_403_FORBIDDEN)
+            return Response({"oldPassword": "Invalid password"}, status=status.HTTP_403_FORBIDDEN)
 
         user.set_password(newPassword)
         user.save()

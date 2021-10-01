@@ -49,7 +49,7 @@ class ActionHistorySerializer(ModelSerializer):
 class TaskSerializer(ModelSerializer):
     class Meta:
         model = Task
-        exclude = ('language', )
+        fields = '__all__'
 
     def to_representation(self, instance):
         r = super().to_representation(instance)
