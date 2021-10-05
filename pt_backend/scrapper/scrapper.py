@@ -45,9 +45,9 @@ class CrackmesScrapper:
             item['name'] = td_s[0]
             item['hexid'] = a['href'].replace('/crackme/', '')
             item['language'] = td_s[2]
-            item['date'] = td_s[6]
-            item['writeups_num'] = int(td_s[7])
-            item['comments_num'] = int(td_s[8])
+            item['date'] = td_s[7]
+            item['writeups_num'] = int(td_s[8])
+            item['comments_num'] = int(td_s[9])
 
             item['date'] = datetime.strptime(item['date'].split(' ')[2], "%m/%d/%Y")
             item['id'] = int(item['hexid'][:8] + item['hexid'][-6:], 16)  # don't ask ...

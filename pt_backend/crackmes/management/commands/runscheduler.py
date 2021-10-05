@@ -30,6 +30,7 @@ class Command(BaseCommand):
             scrap_crackmes,
             trigger=CronTrigger(week="*/1"),
             # trigger=CronTrigger(day="*/1"),
+            # trigger=CronTrigger(minute="*/2"),
             id="scrap_crackmes",
             max_instances=1,
             replace_existing=True,
