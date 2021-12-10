@@ -24,12 +24,13 @@ class TaskSerializer(ModelSerializer):
     class Meta:
         model = Task
         # fields = '__all__'
-        exclude = ('language', )
+        exclude = ('language',)
 
     def to_representation(self, instance):
         r = super().to_representation(instance)
         r['id'] = str(r['id'])
         return r
+
 
 class ScrapperHistorySerializer(ModelSerializer):
     date = DateTimeField(format="%Y-%m-%d", read_only=True)
@@ -37,4 +38,3 @@ class ScrapperHistorySerializer(ModelSerializer):
     class Meta:
         model = ScrapperHistory
         exclude = ('id', 'success')
-

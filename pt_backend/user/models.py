@@ -3,7 +3,6 @@ from django.db.models import CharField
 from django.utils.functional import cached_property
 
 
-
 class AppUser(AbstractUser):
     username = CharField(
         'username',
@@ -21,4 +20,3 @@ class AppUser(AbstractUser):
         from crackmes.models import ActionHistory, StatusEnum
 
         return len(list(ActionHistory.objects.filter(user=self, status=StatusEnum.SOLVED)))
-

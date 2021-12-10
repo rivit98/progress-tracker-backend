@@ -38,7 +38,7 @@ INSTALLED_APPS = [
 
     'crackmes',
     'user',
-    
+
     "django_apscheduler",
 ]
 

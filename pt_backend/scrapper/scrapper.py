@@ -24,7 +24,6 @@ class CrackmesScrapper:
             self.tasks.extend(scrapped_tasks)
             page_nr += 1
 
-
     def scrap(self, page_number):
         scrapped_tasks = []
         link = self.BASE_URL + str(page_number)
@@ -56,7 +55,6 @@ class CrackmesScrapper:
 
         return scrapped_tasks
 
-
     def save(self):
         # print(f"Scrapped: {len(self.tasks)} tasks")
 
@@ -84,8 +82,6 @@ class CrackmesScrapper:
             if orig_t.writeups_num != scrapped_t.writeups_num or orig_t.comments_num != scrapped_t.comments_num:
                 to_update.append(scrapped_t)
 
-
-
         # print(f"to_create {len(to_create)}")
         # print(f"to_update {len(to_update)}")
         # print(f"to_delete {len(to_delete)}")
@@ -109,5 +105,3 @@ def scrap_crackmes():
     p = CrackmesScrapper()
     p.start()
     p.save()
-
-

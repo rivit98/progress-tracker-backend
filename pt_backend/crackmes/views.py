@@ -54,4 +54,3 @@ class UserActions(ListAPIView):
             actionsDict[str(action.task_id)].append({'date': action.date, 'status': action.status})
 
         return Response(actionsDict)
-
