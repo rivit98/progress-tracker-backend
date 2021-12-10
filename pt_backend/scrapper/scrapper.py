@@ -1,9 +1,10 @@
-import time
 from datetime import datetime
+
+import bs4
+import requests
+
 from crackmes.models import Task, ScrapperHistory
 
-import requests
-import bs4
 
 class CrackmesScrapper:
     BASE_URL = "https://crackmes.one/lasts/"

@@ -1,23 +1,6 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
 from django.db.models import Model, CharField, DateTimeField, IntegerField, ForeignKey, CASCADE, IntegerChoices, \
     DateField, PositiveSmallIntegerField, BigAutoField, BooleanField
-from django.utils.functional import cached_property
-
-class AppUser(AbstractUser):
-    username = CharField(
-        'username',
-        max_length=30,
-        unique=True,
-        help_text='Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.',
-        validators=[AbstractUser.username_validator],
-        error_messages={
-            'unique': "A user with that username already exists.",
-        },
-    )
-
-    @cached_property
-    def solved_count(self):
-        return len(list(ActionHistory.objects.filter(user=self, status=StatusEnum.SOLVED)))
 
 
 class Task(Model):
@@ -43,7 +26,7 @@ class StatusEnum(IntegerChoices):
 
 class ActionHistory(Model):
     task = ForeignKey(Task, on_delete=CASCADE, related_name="actions")
-    user = ForeignKey(AppUser, on_delete=CASCADE)
+    user = ForeignKey(get_user_model(), on_delete=CASCADE)
     status = PositiveSmallIntegerField(default=StatusEnum.CLEAR, choices=StatusEnum.choices)
     date = DateTimeField(auto_now_add=True, blank=True)
 

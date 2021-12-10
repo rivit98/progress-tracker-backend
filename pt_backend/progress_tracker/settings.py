@@ -35,7 +35,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     "corsheaders",
+
     'crackmes',
+    'user',
+    
     "django_apscheduler",
 ]
 
@@ -119,7 +122,7 @@ SIMPLE_JWT = {
     # 'BLACKLIST_AFTER_ROTATION': True
 }
 
-AUTH_USER_MODEL = 'crackmes.AppUser'
+AUTH_USER_MODEL = 'user.AppUser'
 
 # Format string for displaying run time timestamps in the Django admin site. The default
 # just adds seconds to the standard Django format, which is useful for displaying the timestamps

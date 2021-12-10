@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from crackmes.models import AppUser, Task, ActionHistory, ScrapperHistory
+from crackmes.models import Task, ActionHistory, ScrapperHistory
+
 
 class ScrapperHistoryAdmin(admin.ModelAdmin):
     def history_date(self, obj: ScrapperHistory):
@@ -21,7 +22,6 @@ class ActionHistoryAdmin(admin.ModelAdmin):
     list_display = ('user', 'task', 'status', 'history_date')
 
 
-admin.site.register(AppUser, UserAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(ActionHistory, ActionHistoryAdmin)
 admin.site.register(ScrapperHistory, ScrapperHistoryAdmin)
