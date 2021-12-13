@@ -27,7 +27,9 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             scrap_crackmes,
-            trigger=CronTrigger(week="*/1"),
+            trigger=CronTrigger(
+                day_of_week="tue", hour="00", minute="00"
+            ),
             # trigger=CronTrigger(day="*/1"),
             # trigger=CronTrigger(minute="*/2"),
             id="scrap_crackmes",
