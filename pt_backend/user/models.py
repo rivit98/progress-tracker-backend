@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db.models import CharField
-from django.utils.functional import cached_property
 
 
 class AppUser(AbstractUser):
@@ -15,8 +14,7 @@ class AppUser(AbstractUser):
         },
     )
 
-    @cached_property
-    def solved_count(self):
-        from crackmes.models import ActionHistory, StatusEnum
-
-        return len(list(ActionHistory.objects.filter(user=self, status=StatusEnum.SOLVED)))
+    class Meta:
+        permissions = [
+            ('special_access', 'Can have access to special trackers')
+        ]

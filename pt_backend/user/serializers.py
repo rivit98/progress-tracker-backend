@@ -12,7 +12,6 @@ class GroupSerializer(ModelSerializer):
 
 class UserSerializer(ModelSerializer):
     groups = GroupSerializer(read_only=True, many=True)
-    solved_count = ReadOnlyField()
     password = CharField(write_only=True)
 
     def create(self, validated_data):
@@ -25,4 +24,4 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'password', 'solved_count', 'groups')
+        fields = ('id', 'username', 'password', 'groups')
