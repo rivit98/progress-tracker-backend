@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
+django = "==3.2.12"
 djangorestframework = "*"
 django-dotenv = "*"
 psycopg2 = "*"
@@ -19,4 +19,4 @@ whitenoise = "*"
 [dev-packages]
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"
