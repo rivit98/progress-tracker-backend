@@ -14,7 +14,6 @@ class CrackmesScrapper:
         self.session = requests.Session()
 
     def start(self):
-
         page_nr = 1
         while True:
             scrapped_tasks = self.scrap(page_nr)

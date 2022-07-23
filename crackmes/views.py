@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import datetime
 
 from rest_framework import permissions, status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
@@ -34,7 +35,10 @@ class LastUpdated(RetrieveAPIView):
     model = ScrapperHistory
 
     def get_object(self):
-        return ScrapperHistory.objects.all().filter(success=True).latest('date')
+        try:
+            return ScrapperHistory.objects.all().filter(success=True).latest('date')
+        except ScrapperHistory.DoesNotExist:
+            return ScrapperHistory(date=datetime.utcfromtimestamp(0))
 
 
 class HasSpecialProgressViewAccess(BasePermission):
