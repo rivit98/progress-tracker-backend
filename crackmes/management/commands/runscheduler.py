@@ -27,11 +27,9 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             scrap_crackmes,
-            trigger=CronTrigger(
-                day_of_week="tue", hour="00", minute="00"
-            ),
+            trigger=CronTrigger(day_of_week="tue", hour="00", minute="00"),
             # trigger=CronTrigger(day="*/1"),
-            # trigger=CronTrigger(minute="*/2"),
+            # trigger=CronTrigger(minute="*/3"),
             id="scrap_crackmes",
             max_instances=1,
             replace_existing=True,
@@ -47,9 +45,7 @@ class Command(BaseCommand):
             max_instances=1,
             replace_existing=True,
         )
-        logger.info(
-            "Added weekly job: 'delete_old_job_executions'."
-        )
+        logger.info("Added weekly job: 'delete_old_job_executions'.")
 
         try:
             logger.info("Starting scheduler...")
