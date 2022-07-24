@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c1154c9c66f95c26263bcbe39d9ad45567fc1d2dbb45acce50a84eafbc7a8b4e"
+            "sha256": "3a97078cbe51017de19e1e5bf84e9f2696c61f730cdb0655d35b62d7d7b0bc22"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -58,11 +58,11 @@
         },
         "django": {
             "hashes": [
-                "sha256:9772e6935703e59e993960832d66a614cf0233a1c5123bc6224ecc6ad69e41e2",
-                "sha256:9b06c289f9ba3a8abea16c9c9505f25107809fb933676f6c891ded270039d965"
+                "sha256:677182ba8b5b285a4e072f3ac17ceee6aff1b5ce77fd173cc5b6a2d3dc022fcf",
+                "sha256:a8681e098fa60f7c33a4b628d6fcd3fe983a0939ff1301ecacac21d0b38bad56"
             ],
             "index": "pypi",
-            "version": "==3.2.12"
+            "version": "==3.2.14"
         },
         "django-apscheduler": {
             "hashes": [
@@ -205,7 +205,7 @@
                 "sha256:238e70234214138ed7b4e8a0fab0e5e13872edab3be586ab8198c407620e2ab9",
                 "sha256:8b536a8ec63dc0751342b3984193a3118f8fca2afe25752bb9b7fffd398552d3"
             ],
-            "markers": "platform_system == 'Windows'",
+            "index": "pypi",
             "version": "==2022.1"
         },
         "tzlocal": {
