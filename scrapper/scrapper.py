@@ -36,20 +36,20 @@ class CrackmesScrapper:
         # print(f'{link} - {len(trs)}')
 
         for tr in trs:
-            td = list(tr.find_all('td'))
-            a = td[0].find('a', href=True)
+            td = list(tr.find_all("td"))
+            a = td[0].find("a", href=True)
             td_s = list(map(lambda t: t.text.strip(), td))
 
             item = dict()
-            item['name'] = td_s[0]
-            item['hexid'] = a['href'].replace('/crackme/', '')
-            item['language'] = td_s[2]
-            item['date'] = td_s[7]
-            item['writeups_num'] = int(td_s[8])
-            item['comments_num'] = int(td_s[9])
+            item["name"] = td_s[0]
+            item["hexid"] = a["href"].replace("/crackme/", "")
+            item["language"] = td_s[2]
+            item["date"] = td_s[7]
+            item["writeups_num"] = int(td_s[8])
+            item["comments_num"] = int(td_s[9])
 
-            item['date'] = datetime.strptime(item['date'].split(' ')[2], "%m/%d/%Y")
-            item['id'] = int(item['hexid'][:8] + item['hexid'][-6:], 16)  # don't ask ...
+            item["date"] = datetime.strptime(item["date"].split(" ")[2], "%m/%d/%Y")
+            item["id"] = int(item["hexid"][:8] + item["hexid"][-6:], 16)  # don't ask ...
             scrapped_tasks.append(Task(**item))
 
         return scrapped_tasks
@@ -62,9 +62,7 @@ class CrackmesScrapper:
         db_tasks_ids = set(db_tasks_ids)
         scrapped_ids = set(list(map(lambda t: t.id, self.tasks)))
         if len(scrapped_ids) != len(self.tasks):
-            ScrapperHistory.objects.create(
-                total_scrapped=len(scrapped_ids) - len(self.tasks)
-            )
+            ScrapperHistory.objects.create(total_scrapped=len(scrapped_ids) - len(self.tasks))
             return
 
         task_dict = {t.id: t for t in self.tasks}
@@ -78,7 +76,10 @@ class CrackmesScrapper:
             orig_t: Task = origin_task_dict[tid]
             scrapped_t: Task = task_dict[tid]
 
-            if orig_t.writeups_num != scrapped_t.writeups_num or orig_t.comments_num != scrapped_t.comments_num:
+            if (
+                orig_t.writeups_num != scrapped_t.writeups_num
+                or orig_t.comments_num != scrapped_t.comments_num
+            ):
                 to_update.append(scrapped_t)
 
         # print(f"to_create {len(to_create)}")
@@ -89,10 +90,10 @@ class CrackmesScrapper:
             total_scrapped=len(self.tasks),
             created=len(to_create),
             updated=len(to_update),
-            deleted=len(to_delete)
+            deleted=len(to_delete),
         )
 
-        Task.objects.bulk_update(to_update, ['writeups_num', 'comments_num'])
+        Task.objects.bulk_update(to_update, ["writeups_num", "comments_num"])
         Task.objects.bulk_create(to_create)
         Task.objects.filter(id__in=to_delete).delete()
 

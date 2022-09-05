@@ -1,13 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from rest_framework.fields import CharField, ReadOnlyField
+from rest_framework.fields import CharField
 from rest_framework.serializers import ModelSerializer
 
 
 class GroupSerializer(ModelSerializer):
     class Meta:
         model = Group
-        fields = ('name',)
+        fields = ("name",)
 
 
 class UserSerializer(ModelSerializer):
@@ -16,12 +16,12 @@ class UserSerializer(ModelSerializer):
 
     def create(self, validated_data):
         user = get_user_model().objects.create_user(
-            username=validated_data['username'],
-            password=validated_data['password'],
+            username=validated_data["username"],
+            password=validated_data["password"],
         )
 
         return user
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'password', 'groups')
+        fields = ("id", "username", "password", "groups")

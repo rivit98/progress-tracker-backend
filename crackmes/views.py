@@ -25,7 +25,11 @@ class UpdateStatus(APIView):
     model = ActionHistory
 
     def post(self, request, id):
-        serializer_data = {"task": id, "user": self.request.user.id, "status": request.data.get('status')}
+        serializer_data = {
+            "task": id,
+            "user": self.request.user.id,
+            "status": request.data.get("status"),
+        }
         serializer = ActionHistorySerializerSave(data=serializer_data)
         if serializer.is_valid():
             serializer.save()
@@ -40,14 +44,14 @@ class LastUpdated(RetrieveAPIView):
 
     def get_object(self):
         try:
-            return ScrapperHistory.objects.all().filter(success=True).latest('date')
+            return ScrapperHistory.objects.all().filter(success=True).latest("date")
         except ScrapperHistory.DoesNotExist:
             return ScrapperHistory(date=datetime.utcfromtimestamp(0))
 
 
 class HasSpecialProgressViewAccess(BasePermission):
     def has_permission(self, request, view):
-        return request.user.groups.filter(name='special_progress_view').exists()
+        return request.user.groups.filter(name="special_progress_view").exists()
 
 
 class UserActions(ListAPIView):
@@ -59,6 +63,6 @@ class UserActions(ListAPIView):
 
         actionsDict = defaultdict(list)
         for action in queryset:
-            actionsDict[str(action.task_id)].append({'date': action.date, 'status': action.status})
+            actionsDict[str(action.task_id)].append({"date": action.date, "status": action.status})
 
         return Response(actionsDict)

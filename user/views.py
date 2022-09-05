@@ -20,14 +20,18 @@ class UserView(APIView):
 
     def put(self, request):
         user: AppUser = request.user
-        oldPassword = request.data.get('oldPassword')
-        newPassword = request.data.get('password')
+        oldPassword = request.data.get("oldPassword")
+        newPassword = request.data.get("password")
 
         if not oldPassword:
-            return Response({"detail": "Missing oldPassword field"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Missing oldPassword field"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         if not newPassword:
-            return Response({"detail": "Missing password field"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Missing password field"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         if not user.check_password(oldPassword):
             return Response({"oldPassword": "Invalid password"}, status=status.HTTP_403_FORBIDDEN)

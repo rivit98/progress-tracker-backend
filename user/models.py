@@ -4,17 +4,15 @@ from django.db.models import CharField
 
 class AppUser(AbstractUser):
     username = CharField(
-        'username',
+        "username",
         max_length=30,
         unique=True,
-        help_text='Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.',
+        help_text="Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.",
         validators=[AbstractUser.username_validator],
         error_messages={
-            'unique': "A user with that username already exists.",
+            "unique": "A user with that username already exists.",
         },
     )
 
     class Meta:
-        permissions = [
-            ('special_access', 'Can have access to special trackers')
-        ]
+        permissions = [("special_access", "Can have access to special trackers")]
