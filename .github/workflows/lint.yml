@@ -1,0 +1,30 @@
+name: Lint
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache for pip
+      uses: actions/cache@v1
+      with:
+        path: ~/.cache/pip
+        key: ${{ matrix.os }}-cache-pip
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.10'
+
+    - name: Install linters
+      run: |
+        pip install isort
+        pip install black
+        pip install flake8
+        sudo snap install shfmt
+    - name: Run linters
+      run: |
+        git diff-index --quiet HEAD -- .
+        ./lint.sh

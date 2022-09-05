@@ -1,7 +1,7 @@
 from rest_framework.fields import DateTimeField
 from rest_framework.serializers import ModelSerializer
 
-from crackmes.models import Task, ActionHistory, ScrapperHistory
+from crackmes.models import ActionHistory, ScrapperHistory, Task
 
 
 class ActionHistorySerializerSave(ModelSerializer):

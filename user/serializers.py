@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from rest_framework.fields import ReadOnlyField, CharField
+from rest_framework.fields import CharField, ReadOnlyField
 from rest_framework.serializers import ModelSerializer
 
 

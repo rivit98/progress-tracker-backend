@@ -7,8 +7,12 @@ from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from crackmes.models import Task, ActionHistory, ScrapperHistory
-from crackmes.serializers import TaskSerializer, ActionHistorySerializerSave, ScrapperHistorySerializer
+from crackmes.models import ActionHistory, ScrapperHistory, Task
+from crackmes.serializers import (
+    ActionHistorySerializerSave,
+    ScrapperHistorySerializer,
+    TaskSerializer,
+)
 
 
 class TasksView(ListAPIView):

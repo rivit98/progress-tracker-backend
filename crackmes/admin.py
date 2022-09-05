@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from crackmes.models import Task, ActionHistory, ScrapperHistory
+from crackmes.models import ActionHistory, ScrapperHistory, Task
 
 
 class ScrapperHistoryAdmin(admin.ModelAdmin):

@@ -3,7 +3,7 @@ from datetime import datetime
 import bs4
 import requests
 
-from crackmes.models import Task, ScrapperHistory
+from crackmes.models import ScrapperHistory, Task
 
 
 class CrackmesScrapper:

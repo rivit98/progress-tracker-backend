@@ -1,6 +1,17 @@
 from django.contrib.auth import get_user_model
-from django.db.models import Model, CharField, DateTimeField, IntegerField, ForeignKey, CASCADE, IntegerChoices, \
-    DateField, PositiveSmallIntegerField, BigAutoField, BooleanField
+from django.db.models import (
+    CASCADE,
+    BigAutoField,
+    BooleanField,
+    CharField,
+    DateField,
+    DateTimeField,
+    ForeignKey,
+    IntegerChoices,
+    IntegerField,
+    Model,
+    PositiveSmallIntegerField,
+)
 
 
 class Task(Model):

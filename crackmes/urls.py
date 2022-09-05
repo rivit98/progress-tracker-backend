@@ -1,6 +1,6 @@
 from django.urls import path
 
-from crackmes.views import TasksView, UpdateStatus, LastUpdated, UserActions
+from crackmes.views import LastUpdated, TasksView, UpdateStatus, UserActions
 
 API_VERSION = 'v1'
 
