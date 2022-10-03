@@ -25,10 +25,10 @@ jobs:
       - name: Install linters
         run: |
           pip install isort black flake8
-          chmod +x ./lint.sh
       - name: Run linters
         run: |
           git diff-index --quiet HEAD -- .
+          chmod +x ./lint.sh
           ./lint.sh
 
   deploy:
