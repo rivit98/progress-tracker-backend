@@ -1,11 +1,12 @@
 FROM python:3.10
 
 WORKDIR /app
+COPY ./requirements-dev.txt /app/requirements-dev.txt
+COPY ./requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r requirements-dev.txt
 
 COPY . ./
 
-RUN pip install --no-cache-dir -r requirements.txt
-
-CMD ["pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:5001"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:5001"]
 
 
