@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "crackmes",
+    "heroes3maps",
     "user",
     "django_apscheduler",
 ]
@@ -114,24 +115,12 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
-    "ROTATE_REFRESH_TOKENS": True
-    # 'BLACKLIST_AFTER_ROTATION': True
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
 }
 
 AUTH_USER_MODEL = "user.AppUser"
 
-# Format string for displaying run time timestamps in the Django admin site. The default
-# just adds seconds to the standard Django format, which is useful for displaying the timestamps
-# for jobs that are scheduled to run on intervals of less than one minute.
-#
-# See https://docs.djangoproject.com/en/dev/ref/settings/#datetime-format for format string
-# syntax details.
-APSCHEDULER_DATETIME_FORMAT = "d/m/Y h:i:s"
 
-# Maximum run time allowed for jobs that are triggered manually via the Django admin site, which
-# prevents admin site HTTP requests from timing out.
-#
-# Longer running jobs should probably be handed over to a background task processing library
-# that supports multiple background worker processes instead (e.g. Dramatiq, Celery, Django-RQ,
-# etc. See: https://djangopackages.org/grids/g/workers-queues-tasks/ for popular options).
+APSCHEDULER_DATETIME_FORMAT = "d/m/Y h:i:s"
 APSCHEDULER_RUN_NOW_TIMEOUT = 300  # Seconds

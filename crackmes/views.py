@@ -3,7 +3,6 @@ from datetime import datetime
 
 from rest_framework import permissions, status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -47,11 +46,6 @@ class LastUpdated(RetrieveAPIView):
             return ScrapperHistory.objects.all().filter(success=True).latest("date")
         except ScrapperHistory.DoesNotExist:
             return ScrapperHistory(date=datetime.utcfromtimestamp(0))
-
-
-class HasSpecialProgressViewAccess(BasePermission):
-    def has_permission(self, request, view):
-        return request.user.groups.filter(name="special_progress_view").exists()
 
 
 class UserActions(ListAPIView):
