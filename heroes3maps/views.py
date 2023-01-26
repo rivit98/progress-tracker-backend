@@ -8,9 +8,15 @@ from heroes3maps.models import ActionHistory, Map
 from heroes3maps.serializers import ActionHistorySerializerSave, MapsSerializer
 
 
-class MapsView(generics.ListAPIView):
+class MapsView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = MapsSerializer
     queryset = Map.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
 class MapView(
@@ -32,9 +38,6 @@ class MapView(
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
 
 class UserActions(generics.ListAPIView):
