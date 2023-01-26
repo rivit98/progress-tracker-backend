@@ -55,8 +55,8 @@ class UserActions(ListAPIView):
         user = self.request.user
         queryset = ActionHistory.objects.filter(user=user)
 
-        actionsDict = defaultdict(list)
+        actions_dict = defaultdict(list)
         for action in queryset:
-            actionsDict[str(action.task_id)].append({"date": action.date, "status": action.status})
+            actions_dict[str(action.task_id)].append({"date": action.date, "status": action.status})
 
-        return Response(actionsDict)
+        return Response(actions_dict)
