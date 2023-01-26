@@ -1,7 +1,11 @@
-from rest_framework import generics, mixins
+from collections import defaultdict
 
-from heroes3maps.models import Map
-from heroes3maps.serializers import MapsSerializer
+from rest_framework import generics, mixins, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from heroes3maps.models import ActionHistory, Map
+from heroes3maps.serializers import ActionHistorySerializerSave, MapsSerializer
 
 
 class MapsView(generics.ListAPIView):
@@ -31,3 +35,35 @@ class MapView(
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class UserActions(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        user = self.request.user
+        queryset = ActionHistory.objects.filter(user=user)
+
+        actions_dict = defaultdict(list)
+        for action in queryset:
+            actions_dict[str(action.map_id)].append({"date": action.date, "status": action.status})
+
+        return Response(actions_dict)
+
+
+class UpdateStatus(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    model = ActionHistory
+
+    def post(self, request, id):
+        serializer_data = {
+            "map": id,
+            "user": self.request.user.id,
+            "status": request.data.get("status"),
+        }
+        serializer = ActionHistorySerializerSave(data=serializer_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

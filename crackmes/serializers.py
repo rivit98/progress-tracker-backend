@@ -12,12 +12,12 @@ class ActionHistorySerializerSave(ModelSerializer):
         fields = "__all__"
 
 
-class ActionHistorySerializer(ModelSerializer):
-    date = DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
-
-    class Meta:
-        model = ActionHistory
-        exclude = ("user", "task", "id")
+# class ActionHistorySerializer(ModelSerializer):
+#     date = DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
+#
+#     class Meta:
+#         model = ActionHistory
+#         exclude = ("user", "task", "id")
 
 
 class TaskSerializer(ModelSerializer):
