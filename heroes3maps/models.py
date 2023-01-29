@@ -16,7 +16,7 @@ class Map(Model):
     id = BigAutoField(primary_key=True)
     name = CharField(max_length=128, unique=True)
     heroes_version = IntegerField()
-    link = CharField(max_length=256)
+    link = CharField(max_length=256, unique=True)
 
     def __str__(self):
         return f"{self.name} for heroes {self.heroes_version}"
