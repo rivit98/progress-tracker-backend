@@ -16,10 +16,7 @@ from django.db.models import (
 class Map(Model):
     id = BigAutoField(primary_key=True)
     name = CharField(max_length=128, unique=True)
-    heroes_version = IntegerField(validators=[
-            MaxValueValidator(7),
-            MinValueValidator(1)
-        ])
+    heroes_version = IntegerField(validators=[MaxValueValidator(7), MinValueValidator(1)])
     link = CharField(max_length=256, unique=True)
 
     def __str__(self):

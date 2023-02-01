@@ -1,15 +1,19 @@
 from collections import defaultdict
 
 from rest_framework import generics, mixins, permissions, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from heroes3maps.models import ActionHistory, Map
+from heroes3maps.permissions import HasSpecialProgressViewAccess, ReadOnly
 from heroes3maps.serializers import ActionHistorySerializerSave, MapsSerializer
 
 
 class MapsView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    permission_classes = ((IsAuthenticated & HasSpecialProgressViewAccess) | ReadOnly,)
     serializer_class = MapsSerializer
+    lookup_field = "id"
     queryset = Map.objects.all()
 
     def get(self, request, *args, **kwargs):
@@ -26,6 +30,7 @@ class MapView(
     mixins.DestroyModelMixin,
     mixins.CreateModelMixin,
 ):
+    permission_classes = ((IsAuthenticated & HasSpecialProgressViewAccess) | ReadOnly,)
     serializer_class = MapsSerializer
     lookup_field = "id"
     queryset = Map.objects.all()
