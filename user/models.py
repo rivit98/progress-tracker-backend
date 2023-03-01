@@ -14,5 +14,3 @@ class AppUser(AbstractUser):
         },
     )
 
-    class Meta:
-        permissions = [("special_access", "Can have access to special trackers")]
