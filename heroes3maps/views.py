@@ -28,7 +28,6 @@ class MapView(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
-    mixins.CreateModelMixin,
 ):
     permission_classes = ((IsAuthenticated & HasSpecialProgressViewAccess) | ReadOnly,)
     serializer_class = MapsSerializer

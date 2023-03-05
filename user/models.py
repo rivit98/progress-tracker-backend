@@ -13,4 +13,3 @@ class AppUser(AbstractUser):
             "unique": "A user with that username already exists.",
         },
     )
-
