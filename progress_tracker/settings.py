@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "crackmes",
     "heroes3maps",
     "user",
+    "games",
     "django_apscheduler",
 ]
 

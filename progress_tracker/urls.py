@@ -7,6 +7,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("crackmes/", include("crackmes.urls")),
     path("heroes_maps/", include("heroes3maps.urls")),
+    path("games/", include("games.urls")),
     path("auth/", include("auth.urls")),
     path("user/", include("user.urls")),
 ]

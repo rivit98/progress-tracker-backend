@@ -3,7 +3,7 @@ from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 class HasSpecialProgressViewAccess(BasePermission):
     def has_permission(self, request, view):
-        return request.user.groups.filter(name="heroes_maps_special").exists()
+        return request.user.groups.filter(name="games_special").exists()
 
 
 class ReadOnly(BasePermission):

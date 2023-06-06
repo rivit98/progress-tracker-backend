@@ -1,12 +1,12 @@
 from rest_framework.fields import DateTimeField
 from rest_framework.serializers import ModelSerializer
 
-from heroes3maps.models import ActionHistory, Map
+from games.models import ActionHistory, Game
 
 
-class MapsSerializer(ModelSerializer):
+class GamesSerializer(ModelSerializer):
     class Meta:
-        model = Map
+        model = Game
         fields = "__all__"
 
 
