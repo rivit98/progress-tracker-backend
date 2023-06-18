@@ -15,11 +15,15 @@ from django.db.models import (
 
 class Map(Model):
     id = BigAutoField(primary_key=True)
-    name = CharField(max_length=128, unique=True)
+    user = ForeignKey(get_user_model(), on_delete=CASCADE, related_name="user_maps")
+    name = CharField(max_length=128)
     heroes_version = IntegerField(validators=[MaxValueValidator(7), MinValueValidator(1)])
 
+    class Meta:
+        unique_together = ("user", "name", "heroes_version")
+
     def __str__(self):
-        return f"{self.name} for heroes {self.heroes_version}"
+        return f"{self.name} for heroes {self.heroes_version} (added by {self.user.username})"
 
 
 class StatusEnum(IntegerChoices):
@@ -31,8 +35,8 @@ class StatusEnum(IntegerChoices):
 
 
 class ActionHistory(Model):
-    map = ForeignKey(Map, on_delete=CASCADE, related_name="actions_heroes3maps")
-    user = ForeignKey(get_user_model(), on_delete=CASCADE, related_name="users_heroes3maps")
+    map = ForeignKey(Map, on_delete=CASCADE, related_name="map_actions")
+    user = ForeignKey(get_user_model(), on_delete=CASCADE, related_name="user_map_actions")
     status = PositiveSmallIntegerField(default=StatusEnum.CLEAR, choices=StatusEnum.choices)
     date = DateTimeField(auto_now_add=True, blank=True)
 

@@ -4,10 +4,11 @@ from rest_framework.viewsets import GenericViewSet
 
 from games.models import ActionHistory, Game
 from games.serializers import (
+    ActionHistorySerializer,
     CreateActionHistorySerializer,
     CreateGameSerializer,
     GameSerializer,
-    GameSerializerWithActions, ActionHistorySerializer,
+    GameSerializerWithActions,
 )
 from progress_tracker.common import CustomSerializerMixin
 

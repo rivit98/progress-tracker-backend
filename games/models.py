@@ -17,7 +17,7 @@ class Game(Model):
     name = CharField(max_length=256)
 
     class Meta:
-        unique_together = ('user', 'name')
+        unique_together = ("user", "name")
 
     def __str__(self):
         return f"{self.name} (added by {self.user.username})"

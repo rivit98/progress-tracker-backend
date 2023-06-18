@@ -1,76 +1,63 @@
-from collections import defaultdict
-
-from rest_framework import generics, mixins, permissions, status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework import generics, mixins, permissions
+from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.viewsets import GenericViewSet
 
 from heroes3maps.models import ActionHistory, Map
-from heroes3maps.permissions import HasSpecialProgressViewAccess, ReadOnly
-from heroes3maps.serializers import ActionHistorySerializerSave, MapsSerializer
-
-
-class MapsView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-    permission_classes = ((IsAuthenticated & HasSpecialProgressViewAccess) | ReadOnly,)
-    serializer_class = MapsSerializer
-    lookup_field = "id"
-    queryset = Map.objects.all()
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+from heroes3maps.serializers import (
+    ActionHistorySerializer,
+    CreateActionHistorySerializer,
+    CreateMapSerializer,
+    MapSerializer,
+    MapSerializerWithActions,
+)
+from progress_tracker.common import CustomSerializerMixin
 
 
 class MapView(
-    generics.GenericAPIView,
+    CustomSerializerMixin,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
+    GenericViewSet,
 ):
-    permission_classes = ((IsAuthenticated & HasSpecialProgressViewAccess) | ReadOnly,)
-    serializer_class = MapsSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_action_classes = {"default": MapSerializer, "create": CreateMapSerializer}
     lookup_field = "id"
-    queryset = Map.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+    def get_queryset(self):
+        return Map.objects.filter(user=self.request.user)
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class UserActions(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = ActionHistorySerializer
 
-    def list(self, request, *args, **kwargs):
-        user = self.request.user
-        queryset = ActionHistory.objects.filter(user=user)
-
-        actions_dict = defaultdict(list)
-        for action in queryset:
-            actions_dict[str(action.map_id)].append({"date": action.date, "status": action.status})
-
-        return Response(actions_dict)
+    def get_queryset(self):
+        return ActionHistory.objects.filter(user=self.request.user)
 
 
-class UpdateStatus(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    model = ActionHistory
+class MapsWithActions(ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = MapSerializerWithActions
 
-    def post(self, request, id):
-        serializer_data = {
-            "map": id,
-            "user": self.request.user.id,
-            "status": request.data.get("status"),
-        }
-        serializer = ActionHistorySerializerSave(data=serializer_data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def get_queryset(self):
+        return Map.objects.filter(user=self.request.user)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateMapStatus(CreateAPIView, mixins.CreateModelMixin):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CreateActionHistorySerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+        kwargs.setdefault("context", self.get_serializer_context())
+        kwargs["data"] = {**self.request.data, "map": self.kwargs.get("id")}
+        return serializer_class(*args, **kwargs)
