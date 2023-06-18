@@ -4,7 +4,7 @@ from heroes3maps.models import ActionHistory, Map
 
 
 class MapAdmin(admin.ModelAdmin):
-    list_display = ("name", "heroes_version")
+    list_display = ("name", "heroes_version", "user")
 
 
 class ActionHistoryAdmin(admin.ModelAdmin):
