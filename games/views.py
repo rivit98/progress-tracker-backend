@@ -53,11 +53,10 @@ class UpdateGameStatus(CreateAPIView, mixins.CreateModelMixin):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = CreateActionHistorySerializer
 
+    def post(self, request, *args, **kwargs):
+        request.data.update({"game": self.kwargs.get("id")})
+        return self.create(request, *args, **kwargs)
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    def get_serializer(self, *args, **kwargs):
-        serializer_class = self.get_serializer_class()
-        kwargs.setdefault("context", self.get_serializer_context())
-        kwargs["data"] = {**self.request.data, "game": self.kwargs.get("id")}
-        return serializer_class(*args, **kwargs)
