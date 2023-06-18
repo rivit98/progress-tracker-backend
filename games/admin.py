@@ -4,7 +4,7 @@ from games.models import ActionHistory, Game
 
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    list_display = ("name", "user")
 
 
 class ActionHistoryAdmin(admin.ModelAdmin):

@@ -1,76 +1,62 @@
-from collections import defaultdict
-
-from rest_framework import generics, mixins, permissions, status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework import generics, mixins, permissions
+from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.viewsets import GenericViewSet
 
 from games.models import ActionHistory, Game
-from games.permissions import HasSpecialProgressViewAccess, ReadOnly
-from games.serializers import ActionHistorySerializerSave, GamesSerializer
-
-
-class GamesView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-    permission_classes = ((IsAuthenticated & HasSpecialProgressViewAccess) | ReadOnly,)
-    serializer_class = GamesSerializer
-    lookup_field = "id"
-    queryset = Game.objects.all()
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+from games.serializers import (
+    CreateActionHistorySerializer,
+    CreateGameSerializer,
+    GameSerializer,
+    GameSerializerWithActions, ActionHistorySerializer,
+)
+from progress_tracker.common import CustomSerializerMixin
 
 
 class GameView(
-    generics.GenericAPIView,
+    CustomSerializerMixin,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
+    GenericViewSet,
 ):
-    permission_classes = ((IsAuthenticated & HasSpecialProgressViewAccess) | ReadOnly,)
-    serializer_class = GamesSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_action_classes = {"default": GameSerializer, "create": CreateGameSerializer}
     lookup_field = "id"
-    queryset = Game.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+    def get_queryset(self):
+        return Game.objects.filter(user=self.request.user)
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class UserActions(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = ActionHistorySerializer
 
-    def list(self, request, *args, **kwargs):
-        user = self.request.user
-        queryset = ActionHistory.objects.filter(user=user)
-
-        actions_dict = defaultdict(list)
-        for action in queryset:
-            actions_dict[str(action.game_id)].append({"date": action.date, "status": action.status})
-
-        return Response(actions_dict)
+    def get_queryset(self):
+        return ActionHistory.objects.filter(user=self.request.user)
 
 
-class UpdateStatus(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    model = ActionHistory
+class GamesWithActions(ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = GameSerializerWithActions
 
-    def post(self, request, id):
-        serializer_data = {
-            "game": id,
-            "user": self.request.user.id,
-            "status": request.data.get("status"),
-        }
-        serializer = ActionHistorySerializerSave(data=serializer_data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def get_queryset(self):
+        return Game.objects.filter(user=self.request.user)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateGameStatus(CreateAPIView, mixins.CreateModelMixin):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CreateActionHistorySerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+        kwargs.setdefault("context", self.get_serializer_context())
+        kwargs["data"] = {**self.request.data, "game": self.kwargs.get("id")}
+        return serializer_class(*args, **kwargs)

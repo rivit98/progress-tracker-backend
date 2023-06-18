@@ -13,10 +13,14 @@ from django.db.models import (
 
 class Game(Model):
     id = BigAutoField(primary_key=True)
-    name = CharField(max_length=256, unique=True)
+    user = ForeignKey(get_user_model(), on_delete=CASCADE, related_name="user_games")
+    name = CharField(max_length=256)
+
+    class Meta:
+        unique_together = ('user', 'name')
 
     def __str__(self):
-        return self.name
+        return f"{self.name} (added by {self.user.username})"
 
 
 class StatusEnum(IntegerChoices):
@@ -28,8 +32,8 @@ class StatusEnum(IntegerChoices):
 
 
 class ActionHistory(Model):
-    game = ForeignKey(Game, on_delete=CASCADE, related_name="actions_games")
-    user = ForeignKey(get_user_model(), on_delete=CASCADE, related_name="users_games")
+    game = ForeignKey(Game, on_delete=CASCADE, related_name="game_actions")
+    user = ForeignKey(get_user_model(), on_delete=CASCADE, related_name="user_game_actions")
     status = PositiveSmallIntegerField(default=StatusEnum.CLEAR, choices=StatusEnum.choices)
     date = DateTimeField(auto_now_add=True, blank=True)
 
