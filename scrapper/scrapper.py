@@ -76,10 +76,7 @@ class CrackmesScrapper:
             orig_t: Task = origin_task_dict[tid]
             scrapped_t: Task = task_dict[tid]
 
-            if (
-                orig_t.writeups_num != scrapped_t.writeups_num
-                or orig_t.comments_num != scrapped_t.comments_num
-            ):
+            if orig_t.writeups_num != scrapped_t.writeups_num or orig_t.comments_num != scrapped_t.comments_num:
                 to_update.append(scrapped_t)
 
         # print(f"to_create {len(to_create)}")
