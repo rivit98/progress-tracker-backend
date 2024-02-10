@@ -6,5 +6,3 @@ COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements-dev.txt
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:5001"]
-
-
